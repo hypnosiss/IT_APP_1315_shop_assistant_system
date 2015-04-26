@@ -6,11 +6,14 @@
 
 	<definition name="base.definition" template="/WEB-INF/views/layout.jsp">
 		<put-attribute name="title" value="Shop Assistant" />
+        <put-attribute name="notification" value="/WEB-INF/views/notification.jsp" />
+        <put-attribute name="pageTitle" value="" cascade="true" />
         <put-attribute name="body" value="" />
 	</definition>
 
-    <definition name="*/*" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/{1}/{2}.jsp" />
-    </definition>
+    <!--<definition name="*/*" extends="base.definition">-->
+        <!--<put-attribute name="body" value="/WEB-INF/views/{1/{2}.jsp" />-->
+        <!--<put-attribute name="pageTitle" value="!!! Dodaj stron? do tiles.xml aby zobaczy? tytu? !!!" />-->
+    <!--</definition>-->
 
 </tiles-definitions>
