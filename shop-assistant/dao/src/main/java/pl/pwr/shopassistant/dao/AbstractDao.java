@@ -1,21 +1,20 @@
-package pl.pwr.shopassistant.dao.impl;
+package pl.pwr.shopassistant.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
-import pl.pwr.shopassistant.dao.Dao;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-public class HibernateAbstractDao<TEntityImpl, TPrimaryKey> implements Dao<TEntityImpl, TPrimaryKey> {
+public class AbstractDao<TEntityImpl, TPrimaryKey> {
 
     @PersistenceContext
     protected EntityManager entityManager;
 
     private Class<? extends TEntityImpl> entityClass;
 
-    public HibernateAbstractDao(Class<? extends TEntityImpl> entityClass) {
+    public AbstractDao(Class<? extends TEntityImpl> entityClass) {
         this.entityClass = entityClass;
     }
 

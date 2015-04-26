@@ -6,8 +6,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import pl.pwr.shopassistant.dao.ProductDao;
-import pl.pwr.shopassistant.dao.impl.HibernateProductDao;
-import pl.pwr.shopassistant.entities.ProductEntity;
+import pl.pwr.shopassistant.entities.Product;
 
 import java.util.List;
 
@@ -19,7 +18,7 @@ public class HomeController {
 
     @RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
     public String home(Model model) {
-        List<ProductEntity> products = productDao.getList();
+        List<Product> products = productDao.getList();
 
         model.addAttribute("products", products);
 

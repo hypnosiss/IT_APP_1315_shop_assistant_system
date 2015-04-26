@@ -1,7 +1,11 @@
 package pl.pwr.shopassistant.dao;
 
-import pl.pwr.shopassistant.entities.ProductEntity;
+import org.springframework.stereotype.Repository;
+import pl.pwr.shopassistant.entities.Product; 
 
-public interface ProductDao extends Dao<ProductEntity, Integer> {
-
+@Repository
+public class ProductDao extends AbstractDao<Product, Long> {
+    public ProductDao() {
+        super(Product.class);
+    }
 }
