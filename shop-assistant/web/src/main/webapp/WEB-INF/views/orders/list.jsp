@@ -12,7 +12,7 @@
                 <th>Date</th>
                 <th>Amount</th>
                 <th>Status</th>
-                <th>Delivery On </th>
+                <th>Delivery On</th>
                 <th># #</th>
             </tr>
         </thead>
@@ -21,12 +21,14 @@
                 <td></td>
                 <td>01/22/2015 </td>
                 <td>
-                    <label class="label label-info">300 USD </label>
+                    <label class="label label-info">300 USD</label>
                 </td>
                 <td>
                     <label class="label label-success">Delivered</label></td>
                 <td>01/25/2015</td>
-                <td> <a href="#"  class="btn btn-xs btn-danger"  >View</a> </td>
+                <td>
+                    <a href="#" class="btn btn-xs btn-danger">View</a>
+                </td>
             </tr>
         </tbody>
     </table>

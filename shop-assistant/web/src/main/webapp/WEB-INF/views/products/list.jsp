@@ -6,7 +6,7 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <div class="table-responsive">
-    <table class="table table-striped table-bordered table-hover">
+    <table id="productsTable" class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
                 <th></th>
@@ -18,7 +18,7 @@
             </tr>
         </thead>
         <tbody>
-            <c:forEach items="${userProducts}" var="userProduct">
+        <c:forEach items="${userProducts}" var="userProduct">
             <tr>
                 <td style="width: 20px;"><input type="checkbox" /></td>
                 <td>${userProduct.product.ean}</td>
@@ -39,7 +39,10 @@
                 </td>
                 <td><fmt:formatDate pattern="dd-MM-yyyy" value="${userProduct.lastOrderTimestamp}"/></td>
             </tr>
-            </c:forEach>
+        </c:forEach>
         </tbody>
     </table>
+</div>
+<div>
+    <button id="neworder" class="btn btn-xs btn-danger">Place Order</button>
 </div>

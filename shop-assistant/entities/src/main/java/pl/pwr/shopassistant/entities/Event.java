@@ -3,16 +3,12 @@ package pl.pwr.shopassistant.entities;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.lang.Integer; 
 import java.lang.String; 
 import java.util.Date; 
 import javax.persistence.Column; 
 import javax.persistence.Entity; 
 import javax.persistence.EnumType; 
-import javax.persistence.Enumerated; 
-import javax.persistence.GeneratedValue; 
-import javax.persistence.GenerationType; 
-import javax.persistence.Id; 
+import javax.persistence.Enumerated;
 import javax.persistence.JoinColumn; 
 import javax.persistence.ManyToOne; 
 import javax.persistence.Table; 
@@ -45,6 +41,4 @@ public class Event extends AbstractEntity implements Serializable {
     @Column(name = "type")
     @Getter @Setter
     protected EventType type;
-
-
 }

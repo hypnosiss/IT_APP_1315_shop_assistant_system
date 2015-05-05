@@ -9,6 +9,12 @@
         <put-attribute name="notification" value="/WEB-INF/views/notification.jsp" />
         <put-attribute name="pageTitle" value="" cascade="true" />
         <put-attribute name="body" value="" />
+        <put-list-attribute name="javascripts">
+            <add-attribute value="/assets/js/jquery-1.11.1.js" />
+            <add-attribute value="/assets/js/bootstrap.js" />
+        </put-list-attribute>
+
+
 	</definition>
 
     <!--<definition name="*/*" extends="base.definition">-->

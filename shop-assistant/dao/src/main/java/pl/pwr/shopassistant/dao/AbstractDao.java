@@ -12,7 +12,7 @@ public class AbstractDao<TEntityImpl, TPrimaryKey> {
     @PersistenceContext
     protected EntityManager entityManager;
 
-    private Class<? extends TEntityImpl> entityClass;
+    public Class<? extends TEntityImpl> entityClass;
 
     public AbstractDao(Class<? extends TEntityImpl> entityClass) {
         this.entityClass = entityClass;
