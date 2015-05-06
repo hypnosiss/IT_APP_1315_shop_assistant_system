@@ -6,6 +6,5 @@ import lombok.Data;
 public class ResponseDTO {
     private Integer resultCode;
     private String errorMessage;
-
     private Object data;
 }

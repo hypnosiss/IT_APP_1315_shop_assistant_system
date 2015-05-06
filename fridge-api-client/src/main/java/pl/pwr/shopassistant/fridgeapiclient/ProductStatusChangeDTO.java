@@ -1,14 +1,41 @@
 package pl.pwr.shopassistant.fridgeapiclient;
 
-import lombok.Data;
 import org.joda.time.DateTime;
 
 import java.util.UUID;
 
-@Data
 public class ProductStatusChangeDTO {
-    private String ean;
+
+//    @Getter @Setter
     private UUID uuid;
+
+//    @Getter @Setter
     private ProductStatus status;
-    private DateTime dateTime;
+
+//    @Getter @Setter
+    private Long timestamp;
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
+    }
+
+    public ProductStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(ProductStatus status) {
+        this.status = status;
+    }
+
+    public Long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(Long timestamp) {
+        this.timestamp = timestamp;
+    }
 }

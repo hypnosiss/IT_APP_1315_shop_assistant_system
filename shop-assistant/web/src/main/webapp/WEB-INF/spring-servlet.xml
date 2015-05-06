@@ -31,6 +31,9 @@
 
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
 
+    <bean id="jsonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJacksonHttpMessageConverter" />
+
     <bean id="localeResolver"
           class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
         <property name="defaultLocale" value="pl" />

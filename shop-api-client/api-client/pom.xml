@@ -9,7 +9,6 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>pl.pwr.shop-assistant</groupId>
     <artifactId>api-client</artifactId>
 
     <dependencies>

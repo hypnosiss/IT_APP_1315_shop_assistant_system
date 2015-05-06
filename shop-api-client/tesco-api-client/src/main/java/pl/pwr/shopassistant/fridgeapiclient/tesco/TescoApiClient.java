@@ -1,9 +1,12 @@
+package pl.pwr.shopassistant.fridgeapiclient.tesco;
+
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
+import org.springframework.stereotype.Service;
 import pl.pwr.shopassistant.apiutils.ResponseDTO;
 import pl.pwr.shopassistant.operationresult.OperationResult;
-import pl.pwr.shopassistant.fridgeapiclient.Product;
+import pl.pwr.shopassistant.fridgeapiclient.ShopProduct;
 import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
 
 import java.util.Set;
@@ -17,7 +20,6 @@ public class TescoApiClient implements ShopApiClient {
         this.host = host;
     }
 
-    @Override
     public OperationResult findProductByEAN(String ean) {
         OperationResult operationResult = new OperationResult();
 
@@ -39,16 +41,15 @@ public class TescoApiClient implements ShopApiClient {
             operationResult.setErrorMessage(responseDTO.getErrorMessage());
         }
 
-        Product product = (Product)responseDTO.getData();
+        ShopProduct shopProduct = (ShopProduct)responseDTO.getData();
 
         //przykład
         operationResult.setResultCode(0);
-        operationResult.setValue(ShopApiClient.FIND_PRODUCT_BY_EAN__PRODUCT, product);
+        operationResult.setValue(ShopApiClient.FIND_PRODUCT_BY_EAN__PRODUCT, shopProduct);
 
         return operationResult;
     }
 
-    @Override
     public OperationResult findProductsByEAN(Set<String> productsEANs) {
         OperationResult operationResult = new OperationResult();
 
@@ -57,7 +58,6 @@ public class TescoApiClient implements ShopApiClient {
         return operationResult;
     }
 
-    @Override
     public OperationResult getDeliveryTimetable() {
         OperationResult operationResult = new OperationResult();
 
@@ -66,7 +66,6 @@ public class TescoApiClient implements ShopApiClient {
         return operationResult;
     }
 
-    @Override
     public OperationResult placeOrder() {
         OperationResult operationResult = new OperationResult();
 

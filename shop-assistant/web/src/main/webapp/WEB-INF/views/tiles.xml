@@ -17,9 +17,4 @@
 
 	</definition>
 
-    <!--<definition name="*/*" extends="base.definition">-->
-        <!--<put-attribute name="body" value="/WEB-INF/views/{1/{2}.jsp" />-->
-        <!--<put-attribute name="pageTitle" value="!!! Dodaj stron? do tiles.xml aby zobaczy? tytu? !!!" />-->
-    <!--</definition>-->
-
 </tiles-definitions>

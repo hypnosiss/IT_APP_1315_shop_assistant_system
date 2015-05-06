@@ -2,12 +2,13 @@ package pl.pwr.shopassistant.dao;
 
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import pl.pwr.shopassistant.entities.AbstractEntity;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.List;
 
-public class AbstractDao<TEntityImpl, TPrimaryKey> {
+public class AbstractDao<TEntityImpl extends AbstractEntity, TPrimaryKey> {
 
     @PersistenceContext
     protected EntityManager entityManager;
@@ -24,6 +25,14 @@ public class AbstractDao<TEntityImpl, TPrimaryKey> {
 
     public void update(TEntityImpl entity) {
         entityManager.merge(entity);
+    }
+
+    public void saveOrUpdate(TEntityImpl entity) {
+        if (entity.isNew()) {
+            this.save(entity);
+        } else {
+            this.update(entity);
+        }
     }
 
     public void detach(TEntityImpl entity){

@@ -33,6 +33,7 @@ public class ProductsController {
                 return userProduct2.getStatus().getValue().compareTo(userProduct1.getStatus().getValue());
             }
         });
+
         model.addAttribute("userProducts", userProducts);
         model.addAttribute("orderStage", 0);
         return "products/list";
