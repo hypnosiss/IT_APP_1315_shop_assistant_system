@@ -1,7 +1,8 @@
 var url = '/orders/new';
 
 var eans;
-var shopName;
+var products;
+var shop;
 var timeSlot;
 
 function changeTitle(content) {
@@ -32,7 +33,7 @@ $(document).ready(function(){
                 url: url + "1",
                 success: form1,
                 error: function(jqXHR, textStatus, errorThrown){
-
+                    console.log(jqXHR, textStatus, errorThrown);
                 }
             });
         } else {
@@ -43,13 +44,14 @@ $(document).ready(function(){
 
 function form1(items) {
     changeTitle("Making order 1/4");
-    var buttonDiv = $('#neworder').parent()
-    $('#neworder').remove();
-
+    var button = $('#neworder');
     var prev = $('<button id="prev" class="btn btn-xs btn-danger">Previous</button>');
-    prev.appendTo(buttonDiv);
+    prev.appendTo(button.parent());
     var next = $('<button id="next" class="btn btn-xs btn-danger">Next</button>');
-    next.appendTo(buttonDiv);
+    next.appendTo(button.parent());
+    button.remove();
+
+    products = items;
 
     var thead = '';
     thead += '<tr>';
@@ -58,7 +60,7 @@ function form1(items) {
     thead += '<th> Brand </th>';
     thead += '<th> Quantity </th>';
     thead += '</tr>';
-    $('#productsTable thead').html(thead);
+    $('#productsTable').find('thead').html(thead);
 
     var tbody = '';
     for (var i = 0; i < items.length; i++) {
@@ -69,7 +71,7 @@ function form1(items) {
         tbody += '<td><input type="button" class="fa fa-angle-left" value="&#xf011" onClick="decrement(\'' + i + '\')" /><span>' + items[i].quantity + '</span><input type="button" class="fa fa-angle-right" value="&#xf011" onClick="increment(\'' + i + '\')" /></td>';
         tbody += '</tr>';
     }
-    $('#productsTable tbody').html(tbody);
+    $('#productsTable').find('tbody').html(tbody);
 
     $('#next').unbind('click');
     $("#next").click(function(){
@@ -86,6 +88,7 @@ function form1(items) {
             url: url + "2",
             success: form2,
             error: function(jqXHR, textStatus, errorThrown){
+                console.log(jqXHR, textStatus, errorThrown);
             }
         });
     });
@@ -93,16 +96,18 @@ function form1(items) {
 
 function increment(rowString) {
     var row = parseInt(rowString);
-    var span = $('#productsTable tbody').find('tr').eq(row).find('td').eq(3).find('span');
+    var span = $('#productsTable').find('tbody').find('tr').eq(row).find('td').eq(3).find('span');
     var quantity = parseInt(span.html());
+    products[row].quantity++;
     span.text((quantity + 1).toString());
 }
 
 function decrement(rowString) {
     var row = parseInt(rowString);
-    var span = $('#productsTable tbody').find('tr').eq(row).find('td').eq(3).find('span');
+    var span = $('#productsTable').find('tbody').find('tr').eq(row).find('td').eq(3).find('span');
     var quantity = parseInt(span.html());
     if (quantity > 0) {
+        products[row].quantity--;
         span.text((quantity - 1).toString());
     }
 }
@@ -112,31 +117,32 @@ function form2(items) {
 
     var thead = '';
     thead += '<tr>';
-    thead += '<th></th>'
+    thead += '<th></th>';
     thead += '<th> Shop </th>';
     thead += '<th> Address </th>';
     thead += '<th> Products </th>';
     thead += '<th> Price </th>';
     thead += '</tr>';
-    $('#productsTable thead').html(thead);
+    $('#productsTable').find('thead').html(thead);
 
     var tbody = '';
     for (var i = 0; i < items.length; i++) {
         tbody += '<tr id="' + i + '">';
-        tbody += '<td>' + '<input type="radio" name="shop" value="' + items[i].name + '"/>' + '</td>';
+        tbody += '<td>' + '<input type="radio" name="shop" value="' + i + '"/>' + '</td>';
         tbody += '<td>' + items[i].name + '</td>';
         tbody += '<td>' + items[i].address + '</td>';
         tbody += '<td>' + items[i].products + '</td>';
         tbody += '<td>' + items[i].price + '</td>';
         tbody += '</tr>';
     }
-    $('#productsTable tbody').html(tbody);
+    $('#productsTable').find('tbody').html(tbody);
     $('input[type=radio]:first', '#productsTable tbody').attr('checked', true);
 
     $('#next').unbind('click');
     $("#next").click(function(){
-        shopName = $("input[type='radio'][name='shop']:checked").val();
-        var postData = JSON.stringify(shopName);
+        var shopIdx = $("input[type='radio'][name='shop']:checked").val();
+        shop = items[shopIdx];
+        var postData = JSON.stringify(shop.shopName);
 
         $.ajax({
             headers: {
@@ -149,6 +155,7 @@ function form2(items) {
             url: url + "3",
             success: form3,
             error: function(jqXHR, textStatus, errorThrown){
+                console.log(jqXHR, textStatus, errorThrown);
             }
         });
     });
@@ -159,12 +166,12 @@ function form3(items) {
 
     var thead = '';
     thead += '<tr>';
-    thead += '<th></th>'
+    thead += '<th></th>';
     thead += '<th> Date </th>';
     thead += '<th> From </th>';
     thead += '<th> To </th>';
     thead += '</tr>';
-    $('#productsTable thead').html(thead);
+    $('#productsTable').find('thead').html(thead);
 
     var tbody = '';
     for (var i = 0; i < items.length; i++) {
@@ -175,25 +182,70 @@ function form3(items) {
         tbody += '<td>' + items[i].to + '</td>';
         tbody += '</tr>';
     }
-    $('#productsTable tbody').html(tbody);
+    $('#productsTable').find('tbody').html(tbody);
     $('input[type=radio]:first', '#productsTable tbody').attr('checked', true);
 
     $('#next').unbind('click');
     $("#next").click(function(){
         var itemIdx = $("input[type='radio'][name='timeslot']:checked").val();
         timeSlot = items[itemIdx];
-        form4();
+
+        $.ajax({
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            type: "GET",
+            dataType: "json",
+            url: url + "4",
+            success: form4,
+            error: function(jqXHR, textStatus, errorThrown){
+                console.log(jqXHR, textStatus, errorThrown);
+            }
+        });
     });
 }
 
-function form4() {
+function form4(items) {
     changeTitle("Making order 4/4");
-    $('#productsTable thead').html('');
-    $('#productsTable tbody').html('');
+    $('#productsTable').find('thead').html('');
+    $('#productsTable').find('tbody').html('');
+
+    var parent = $('#productsTable').parent()
+
+    $('<h4>', {
+        text: "Products:"
+    }).appendTo($('#productsTable').parent());
+    $.each(products, function(idx, product){
+        $('<p>', {
+            text:  product.quantity + " of " + product.name
+        }).appendTo(parent);
+    });
+
+    $('<h4>', {
+        text: "Shop:"
+    }).appendTo(parent);
+    $('<p>', {
+        text: shop.name + ", " + shop.address
+    }).appendTo(parent);
+
+    $('<h4>', {
+        text: "Delivery address:"
+    }).appendTo(parent);
+    $('<p>', {
+        text: items.value
+    }).appendTo(parent);
+
+    $('<h4>', {
+        text: "Delivery date and time:"
+    }).appendTo(parent);
+    $('<p>', {
+        text: timeSlot.date + " between " +  timeSlot.from + " and " + timeSlot.to
+    }).appendTo(parent);
 
     $('#next').unbind('click');
     $("#next").click(function(){
-        var order = {eans:eans, shopName:shopName, timeSlot:timeSlot};
+        var order = {eans:eans, shopName:shop.shopName, timeSlot:timeSlot};
         var postData = JSON.stringify(order);
 
         $.ajax({
@@ -204,9 +256,10 @@ function form4() {
             type: "POST",
             dataType: "json",
             data: postData,
-            url: url + "5",
+            url: url + "/finalize",
             success: orderCreated,
             error: function(jqXHR, textStatus, errorThrown){
+                console.log(jqXHR, textStatus, errorThrown);
             }
         });
     });

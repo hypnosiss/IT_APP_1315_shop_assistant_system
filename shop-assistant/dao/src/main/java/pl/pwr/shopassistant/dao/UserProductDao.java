@@ -14,11 +14,6 @@ public class UserProductDao extends AbstractDao<UserProduct, Integer> {
         super(UserProduct.class);
     }
 
-    public UserProduct getUserProductForEAN(String ean) {
-        return entityManager.createQuery("select up from " + this.entityClass.getName() +
-                " as up, Product as p where p.ean=" + ean, UserProduct.class).getSingleResult();
-    }
-
     public UserProduct findByUserAndProduct(User user, Product product) {
         Criteria criteria = createEntityCriteria();
 
