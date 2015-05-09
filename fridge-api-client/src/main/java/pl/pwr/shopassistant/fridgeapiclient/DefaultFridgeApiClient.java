@@ -43,7 +43,7 @@ public class DefaultFridgeApiClient implements FridgeApiClient {
         LOGGER.info(jsonString);
 
         //wysłanie zapytanie
-        String apiUrl = String.format("%s/api/v1/products/%s/change-status", host, ean);
+        String apiUrl = String.format("%s/api/products/%s/change-status", host, ean);
         LOGGER.info(apiUrl);
 
         WebResource webResource = client.resource(apiUrl);

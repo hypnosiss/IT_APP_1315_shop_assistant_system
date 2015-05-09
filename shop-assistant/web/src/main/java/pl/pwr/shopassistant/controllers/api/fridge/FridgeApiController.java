@@ -17,6 +17,7 @@ import pl.pwr.shopassistant.entities.enums.UserProductStatus;
 import pl.pwr.shopassistant.forms.ProductStatusChangeForm;
 import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
 import pl.pwr.shopassistant.fridgeapiclient.ShopProduct;
+import pl.pwr.shopassistant.fridgeapiclient.tesco.MockApiClient;
 import pl.pwr.shopassistant.fridgeapiclient.tesco.TescoApiClient;
 import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.hash.HashService;
@@ -86,7 +87,8 @@ public class FridgeApiController {
             String name = "unknown";
             String brand = "unknown";
 
-            ShopApiClient shopApiClient = new TescoApiClient("http://localhost:8080");
+//            ShopApiClient shopApiClient = new TescoApiClient("http://localhost:8080");
+            ShopApiClient shopApiClient = new MockApiClient();
             OperationResult operationResult = shopApiClient.findProductByEAN(ean);
             if (operationResult.getResultCode() == 0) {
                 ShopProduct shopProduct =

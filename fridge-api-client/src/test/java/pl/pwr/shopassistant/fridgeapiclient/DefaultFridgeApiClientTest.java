@@ -17,10 +17,10 @@ public class DefaultFridgeApiClientTest {
         Sha1HashService sha1HashService = new Sha1HashService();
 
         String login = "vansel";
-        String password = "test";
-        String apiKey = sha1HashService.hash(login + password);
+        String password = "test1234";
+        String apiKey = sha1HashService.hash(login + sha1HashService.hash(password));
 
-        DefaultFridgeApiClient fridgeApiClient = new DefaultFridgeApiClient("http://127.0.0.1:8080", login, apiKey);
+        DefaultFridgeApiClient fridgeApiClient = new DefaultFridgeApiClient("http://vansel.ddns.net:8080", login, apiKey);
 
         String ean = "1234567891011";
         ProductStatus productStatus = ProductStatus.in;
@@ -38,10 +38,10 @@ public class DefaultFridgeApiClientTest {
         Sha1HashService sha1HashService = new Sha1HashService();
 
         String login = "vansel";
-        String password = "test";
-        String apiKey = sha1HashService.hash(login + password);
+        String password = "test1234";
+        String apiKey = sha1HashService.hash(login + sha1HashService.hash(password));
 
-        DefaultFridgeApiClient fridgeApiClient = new DefaultFridgeApiClient("http://127.0.0.1:8080", login, apiKey);
+        DefaultFridgeApiClient fridgeApiClient = new DefaultFridgeApiClient("http://vansel.ddns.net:8080", login, apiKey);
 
         String ean = "1234567891011";
         ProductStatus productStatus = ProductStatus.out;

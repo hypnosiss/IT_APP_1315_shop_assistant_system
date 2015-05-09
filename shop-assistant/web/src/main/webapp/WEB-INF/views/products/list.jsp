@@ -47,13 +47,13 @@
 
 <div style="float: right">
     <div style="float: left;">
-        <label>Search product: </label>&nbsp;&nbsp;
+        <label>Add product: </label>&nbsp;&nbsp;
     </div>
     <div style="float: left;">
         <input type="text" id="search-product-ean" placeholder="EAN" class="form-control" style="width: 300px;float: left;" />
     </div>
     <div style="float: left;">
-        <button id="search-product-button" class="btn btn-primary" style="float: left;">Search</button>
+        <button id="search-product-button" class="btn btn-primary" style="float: left;">Add</button>
     </div>
     <div style="clear: both"></div>
 </div>
