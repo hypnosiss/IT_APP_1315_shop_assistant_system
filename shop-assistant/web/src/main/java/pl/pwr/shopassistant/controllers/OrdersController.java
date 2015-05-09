@@ -3,6 +3,7 @@ package pl.pwr.shopassistant.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Controller
+@Transactional
 @RequestMapping(value = "/orders")
 public class OrdersController {
 

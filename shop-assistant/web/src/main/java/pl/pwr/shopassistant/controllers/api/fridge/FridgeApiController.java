@@ -1,4 +1,4 @@
-package pl.pwr.shopassistant.controllers.api;
+package pl.pwr.shopassistant.controllers.api.fridge;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -56,7 +56,21 @@ public class FridgeApiController {
         String login = request.getHeader("X-API-USER");
         String apiKey = request.getHeader("X-API-KEY");
 
+        if (login == null || login.isEmpty() || apiKey == null || apiKey.isEmpty()) {
+            responseDTO.setResultCode(1);
+            responseDTO.setErrorMessage("API key invalid or not provided");
+
+            return responseDTO;
+        }
+
         User user = userDao.findByUsername(login);
+        if (user == null) {
+            responseDTO.setResultCode(1);
+            responseDTO.setErrorMessage("API key invalid or not provided");
+
+            return responseDTO;
+        }
+
         String userKey = hashService.hash(user.getUsername() + user.getPassword());
         if (!apiKey.equals(userKey)) {
             responseDTO.setResultCode(1);

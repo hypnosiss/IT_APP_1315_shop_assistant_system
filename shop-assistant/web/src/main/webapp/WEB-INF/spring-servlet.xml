@@ -29,6 +29,8 @@
         </mvc:interceptor>
     </mvc:interceptors>
 
+    <import resource="spring-security.xml" />
+
     <bean id="conversionService" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" />
 
     <bean id="jsonHttpMessageConverter"

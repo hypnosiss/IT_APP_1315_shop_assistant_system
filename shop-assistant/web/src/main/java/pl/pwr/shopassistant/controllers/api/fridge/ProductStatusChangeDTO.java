@@ -1,9 +1,6 @@
-package pl.pwr.shopassistant.controllers.api;
+package pl.pwr.shopassistant.controllers.api.fridge;
 
 import lombok.Data;
-import org.joda.time.DateTime;
-
-import java.util.UUID;
 
 @Data
 public class ProductStatusChangeDTO {

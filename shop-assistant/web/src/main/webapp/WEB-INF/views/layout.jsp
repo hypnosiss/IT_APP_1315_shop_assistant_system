@@ -31,9 +31,16 @@
 <header>
 	<div class="container">
 		<div class="row">
-			<div class="col-md-12">
+			<div class="col-md-6" style="text-align: left;">
 				<strong>Shop Assistant</strong>
 			</div>
+
+			<sec:authorize access="isAuthenticated()">
+				<sec:authentication property="principal.username" var="username"/>
+				<div class="col-md-6">
+					<strong>Welcome, ${username}!</strong>
+				</div>
+			</sec:authorize>
 		</div>
 	</div>
 </header>
@@ -45,9 +52,16 @@
 			<div class="col-md-12">
 				<div class="navbar-collapse collapse ">
 					<ul id="menu-top" class="nav navbar-nav navbar-right">
-						<li><a class="menu-top-active" href="/products">Products</a></li>
-						<li><a href="/orders">Orders</a></li>
-						<li><a href="/logout">Logout</a></li>
+						<sec:authorize access="isAuthenticated()">
+							<c:set var="activeTab" ><tiles:insertAttribute name="activeTab"/></c:set>
+							<li><a ${(activeTab == 'products') ? ' class="menu-top-active"' : ''} href="/products">Products</a></li>
+							<li><a ${(activeTab == 'orders') ? ' class="menu-top-active"' : ''} href="/orders">Orders</a></li>
+							<li><a ${(activeTab == 'settings') ? ' class="menu-top-active"' : ''} href="/settings">Settings</a></li>
+							<li><a href="/logout">Logout</a></li>
+						</sec:authorize>
+						<sec:authorize access="isAnonymous()">
+							<li>&nbsp;</li>
+						</sec:authorize>
 					</ul>
 				</div>
 			</div>
