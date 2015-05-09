@@ -1,5 +1,6 @@
 package pl.pwr.shopassistant.controllers;
 
+import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Controller;
@@ -17,8 +18,13 @@ import pl.pwr.shopassistant.entities.Product;
 import pl.pwr.shopassistant.entities.Shop;
 import pl.pwr.shopassistant.entities.User;
 import pl.pwr.shopassistant.entities.UserProduct;
+import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
+import pl.pwr.shopassistant.fridgeapiclient.TimePeriod;
+import pl.pwr.shopassistant.fridgeapiclient.tesco.MockApiClient;
 import pl.pwr.shopassistant.fridgeapiclient.tesco.TescoApiClient;
 import pl.pwr.shopassistant.model.*;
+import pl.pwr.shopassistant.operationresult.OperationResult;
+import pl.pwr.shopassistant.services.auth.AuthService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -41,6 +47,9 @@ public class OrdersController {
     @Autowired
     private ShopDao shopDao;
 
+    @Autowired
+    private AuthService authService;
+
     @RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
     public String list(Model model) {
         return "orders/list";
@@ -52,10 +61,9 @@ public class OrdersController {
     OrderSummaryItem[] new1(@RequestBody String[] eans, HttpServletRequest request) {
 
         List<UserProduct> userProducts  = new LinkedList<UserProduct>();
-        //TODO get currently logged in user
         for(String ean : eans) {
             Product product = productDao.findProductByEan(ean);
-            User user = userDao.findByUsername("root");
+            User user = authService.getCurrentUser();
             UserProduct userProduct = userProductDao.findByUserAndProduct(user, product);
             if(null != userProduct) {
                 userProducts.add(userProduct);
@@ -80,9 +88,8 @@ public class OrdersController {
     public @ResponseBody
     OrderSummaryShop[] new2(@RequestBody OrderSummaryItem[] items, HttpServletRequest request) {
         for(OrderSummaryItem item : items) {
-            //TODO get currently logged in user
             Product product = productDao.findProductByEan(item.getEan());
-            User user = userDao.findByUsername("root");
+            User user = authService.getCurrentUser();
             UserProduct userProduct = userProductDao.findByUserAndProduct(user, product);
             if (null != userProduct) {
                 userProduct.setQuantity(item.getQuantity());
@@ -101,6 +108,15 @@ public class OrdersController {
     @RequestMapping(value = { "/new3" }, method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public @ResponseBody
     TimeSlot[] new3(@RequestBody String shopName, HttpServletRequest request) {
+        MockApiClient mockApiClient = new MockApiClient();
+        OperationResult operationResult = mockApiClient.getDeliveryTimetable();
+        if (operationResult.getResultCode() != 0) {
+            //@TODO
+        }
+
+        Map<LocalDate, List<TimePeriod>> timetable =
+                (Map<LocalDate, List<TimePeriod>>) operationResult.getValue(ShopApiClient.GET_DELIVERY_TIMETABLE__TIMETABLE);
+
         //Shop shop = shopDao.getByName(shopName);
         //TescoApiClient client = new TescoApiClient();
         //List<TimeSlot> timeSlots = client.getDeliveryTimetable();
@@ -115,8 +131,7 @@ public class OrdersController {
     @RequestMapping(value = { "new4" }, method = RequestMethod.GET, produces = "application/json")
     public @ResponseBody
     JsonString new4(HttpServletRequest request) throws IOException {
-        //TODO get address from logged in user
-        User user = userDao.findByUsername("root");
+        User user = authService.getCurrentUser();
         return new JsonString(user.getAddress());
     }
 

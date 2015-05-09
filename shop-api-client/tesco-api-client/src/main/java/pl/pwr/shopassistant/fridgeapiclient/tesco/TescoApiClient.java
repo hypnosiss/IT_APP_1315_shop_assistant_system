@@ -50,7 +50,7 @@ public class TescoApiClient implements ShopApiClient {
         return operationResult;
     }
 
-    public OperationResult findProductsByEAN(Set<String> productsEANs) {
+    public OperationResult findProductsByEANs(Set<String> productsEANs) {
         OperationResult operationResult = new OperationResult();
 
         //

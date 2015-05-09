@@ -11,7 +11,7 @@
 		<intercept-url pattern="/assets/js/**" access="permitAll" />
 		<intercept-url pattern="/assets/fonts/**" access="permitAll" />
 
-		<intercept-url pattern="/api/**" access="isAnonymous()" />
+		<intercept-url pattern="/api/**" access="permitAll" />
 
 		<intercept-url pattern="/login" access="isAnonymous()" />
 		<intercept-url pattern="/register" access="isAnonymous()" />

@@ -2,6 +2,65 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
+<script type="application/javascript">
+    $(document).ready(function () {
+        var progressbarValue = 0;
+
+        function reloadProgressBar() {
+            progressbarValue += 2;
+
+            $('#search-product-progressbar').attr('aria-valuenow', progressbarValue)
+                    .css('width', progressbarValue + '%');
+            if (progressbarValue == 100) {
+                return;
+            }
+
+            setTimeout(reloadProgressBar, 100);
+        }
+
+        $('#search-product-button').click(function () {
+            var ean = $('#search-product-ean').val();
+            if (!ean.match("([0-9]{8})") && !ean.match("([0-9]{13})")) {
+                alert('Invalid European Article Number');
+                return false;
+            }
+
+            $('#search-product-modal').modal();
+            setTimeout(reloadProgressBar, 100);
+
+            $.ajax({
+                method: "POST",
+                url: "/products/add",
+                cache: false,
+                data: JSON.stringify({ean: ean}),
+                datatype : "json",
+                contentType: "application/json; charset=utf-8",
+            })
+            .done(function() {
+                window.location = '/products';
+            });
+
+            return false;
+        });
+    });
+</script>
+
+<div style="float: right">
+    <div style="float: left;">
+        <label>Search product: </label>&nbsp;&nbsp;
+    </div>
+    <div style="float: left;">
+        <input type="text" id="search-product-ean" placeholder="EAN" class="form-control" style="width: 300px;float: left;" />
+    </div>
+    <div style="float: left;">
+        <button id="search-product-button" class="btn btn-primary" style="float: left;">Search</button>
+    </div>
+    <div style="clear: both"></div>
+</div>
+<div style="clear: both"></div>
+
+<br/>
+
 <div class="table-responsive">
     <table id="productsTable" class="table table-striped table-bordered table-hover">
         <thead>
@@ -50,5 +109,25 @@
     </table>
 </div>
 <div>
-    <button id="neworder" class="btn btn-xs btn-danger">Place Order</button>
+    <button id="neworder" class="btn btn-danger">Place Order</button>
+</div>
+
+<div class="modal fade" id="search-product-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                <h4 class="modal-title" id="myModalLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div class="progress progress-striped active">
+                    <div class="progress-bar progress-bar-primary" id="search-product-progressbar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0"></div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
 </div>

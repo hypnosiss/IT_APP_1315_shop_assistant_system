@@ -7,7 +7,7 @@ import java.util.Set;
 
 public interface ShopApiClient {
     public static final String FIND_PRODUCT_BY_EAN__PRODUCT = "FIND_PRODUCT_BY_EAN__PRODUCT";
-    public static final String FIND_PRODUCTS_BY_EAN__PRODUCTS = "FIND_PRODUCTS_BY_EAN__PRODUCTS";
+    public static final String FIND_PRODUCTS_BY_EANS__PRODUCTS = "FIND_PRODUCTS_BY_EANS__PRODUCTS";
     public static final String GET_DELIVERY_TIMETABLE__TIMETABLE = "GET_DELIVERY_TIMETABLE__TIMETABLE";
 
     /**
@@ -23,7 +23,7 @@ public interface ShopApiClient {
      * @param productsEANs
      * @return OperationResult (products: Set<Product>)
      */
-    public OperationResult findProductsByEAN(Set<String> productsEANs);
+    public OperationResult findProductsByEANs(Set<String> productsEANs);
 
     /**
      *  @return OperationResult (timetable: Map<LocalDate, List<TimePeriod>>)

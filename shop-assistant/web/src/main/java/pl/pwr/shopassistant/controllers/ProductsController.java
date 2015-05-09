@@ -5,12 +5,22 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import pl.pwr.shopassistant.apiutils.ResponseDTO;
+import pl.pwr.shopassistant.controllers.api.fridge.ProductStatus;
+import pl.pwr.shopassistant.dao.ProductDao;
+import pl.pwr.shopassistant.entities.Product;
+import pl.pwr.shopassistant.entities.enums.UserProductStatus;
+import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
+import pl.pwr.shopassistant.fridgeapiclient.ShopProduct;
+import pl.pwr.shopassistant.fridgeapiclient.tesco.MockApiClient;
+import pl.pwr.shopassistant.fridgeapiclient.tesco.TescoApiClient;
+import pl.pwr.shopassistant.model.AddProductForm;
+import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.auth.AuthService;
 import pl.pwr.shopassistant.dao.UserProductDao;
 import pl.pwr.shopassistant.entities.User;
 import pl.pwr.shopassistant.entities.UserProduct;
 import pl.pwr.shopassistant.entities.comparators.UserProductsByStatusComparator;
-import pl.pwr.shopassistant.model.OrderSummaryItem;
 import pl.pwr.shopassistant.services.notifications.NotificationsService;
 
 import javax.servlet.http.HttpServletRequest;
@@ -30,6 +40,9 @@ public class ProductsController {
     @Autowired
     private AuthService authService;
 
+    @Autowired
+    private ProductDao productDao;
+
 
     @RequestMapping(value = { "", "/", "/list" }, method = RequestMethod.GET)
     public String list(Model model) {
@@ -43,4 +56,58 @@ public class ProductsController {
         return "products/list";
     }
 
+    @RequestMapping(value = { "/add" }, method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    public @ResponseBody ResponseDTO changeProductStatus(@RequestBody AddProductForm addProductForm) {
+
+        ResponseDTO responseDTO = new ResponseDTO();
+
+        String ean = addProductForm.getEan();
+
+        User currentUser = authService.getCurrentUser();
+
+        Product product = productDao.findProductByEan(ean);
+        if (product == null) {
+            String name = "unknown";
+            String brand = "unknown";
+
+            ShopApiClient shopApiClient = new MockApiClient();
+            OperationResult operationResult = shopApiClient.findProductByEAN(ean);
+            if (operationResult.getResultCode() == 0) {
+                ShopProduct shopProduct =
+                        (ShopProduct) operationResult.getValue(ShopApiClient.FIND_PRODUCT_BY_EAN__PRODUCT);
+
+                if (shopProduct != null) {
+                    name = shopProduct.getName();
+                    brand = shopProduct.getBrand();
+                }
+            }
+
+            product = new Product();
+            product.setName(name);
+            product.setBrand(brand);
+            product.setEan(ean);
+            productDao.save(product);
+        }
+
+        UserProduct userProduct = userProductDao.findByUserAndProduct(currentUser, product);
+        if (userProduct == null) {
+            userProduct = new UserProduct();
+            userProduct.setQuantity(0);
+            userProduct.setName(null);
+            userProduct.setUser(currentUser);
+            userProduct.setProduct(product);
+            userProduct.setStatus(UserProductStatus.unknown);
+            userProductDao.saveOrUpdate(userProduct);
+        } else {
+            notificationsService.addInfoMessage("Product already in the list");
+            return responseDTO;
+        }
+
+        notificationsService.addSuccessMessage("Product added");
+
+        responseDTO.setResultCode(0);
+        responseDTO.setData(null);
+        responseDTO.setErrorMessage(null);
+        return responseDTO;
+    }
 }

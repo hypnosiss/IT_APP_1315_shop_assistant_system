@@ -14,6 +14,7 @@ import pl.pwr.shopassistant.entities.User;
 import pl.pwr.shopassistant.entities.UserProduct;
 import pl.pwr.shopassistant.entities.enums.EventType;
 import pl.pwr.shopassistant.entities.enums.UserProductStatus;
+import pl.pwr.shopassistant.forms.ProductStatusChangeForm;
 import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
 import pl.pwr.shopassistant.fridgeapiclient.ShopProduct;
 import pl.pwr.shopassistant.fridgeapiclient.tesco.TescoApiClient;
@@ -25,7 +26,8 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.Date;
 
 @RestController
-@RequestMapping(value = { "/api/v1" })
+@Transactional
+@RequestMapping(value = { "/api" })
 public class FridgeApiController {
 
     @Autowired
@@ -44,9 +46,9 @@ public class FridgeApiController {
     @Resource(name="sha1HashService")
     private HashService hashService;
 
-    @Transactional
+
     @RequestMapping(value = { "/products/{ean}/change-status" }, method = RequestMethod.POST, consumes = "application/json")
-    public ResponseDTO changeProductStatus(@RequestBody ProductStatusChangeDTO productStatusChangeDTO,
+    public ResponseDTO changeProductStatus(@RequestBody ProductStatusChangeForm productStatusChangeForm,
                                            @PathVariable(value = "ean") String ean,
                                            HttpServletRequest request) {
 
@@ -105,13 +107,13 @@ public class FridgeApiController {
 
         Event event = new Event();
         event.setProduct(product);
-        event.setUuid(productStatusChangeDTO.getUuid());
-        event.setTriggerTimestamp(new Date(productStatusChangeDTO.getTimestamp()));
+        event.setUuid(productStatusChangeForm.getUuid());
+        event.setTriggerTimestamp(new Date(productStatusChangeForm.getTimestamp()));
         event.setUser(user);
 
         EventType eventType = null;
         UserProductStatus userProductStatus = null;
-        switch (productStatusChangeDTO.getStatus()) {
+        switch (productStatusChangeForm.getStatus()) {
             case in:
                 eventType = EventType.in;
                 userProductStatus = UserProductStatus.in;
@@ -137,9 +139,9 @@ public class FridgeApiController {
             userProduct.setStatus(userProductStatus);
         } else {
             Integer quantity = userProduct.getQuantity();
-            if (productStatusChangeDTO.getStatus().equals(ProductStatus.in)) {
+            if (productStatusChangeForm.getStatus().equals(ProductStatus.in)) {
                 quantity += 1;
-            } else if (productStatusChangeDTO.getStatus().equals(ProductStatus.out)) {
+            } else if (productStatusChangeForm.getStatus().equals(ProductStatus.out)) {
                 quantity -= 1;
             }
 

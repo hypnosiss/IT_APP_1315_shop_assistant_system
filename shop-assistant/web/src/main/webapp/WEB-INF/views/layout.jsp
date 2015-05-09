@@ -26,6 +26,11 @@
 	<script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
 	<script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
 	<![endif]-->
+
+	<tiles:importAttribute name="javascripts"/>
+	<c:forEach var="script" items="${javascripts}">
+		<script src="<c:url value="${script}"/>"></script>
+	</c:forEach>
 </head>
 <body>
 <header>
@@ -96,10 +101,6 @@
 	</div>
 </footer>
 <!-- FOOTER SECTION END-->
-<!-- JAVASCRIPT AT THE BOTTOM TO REDUCE THE LOADING TIME  -->
-<tiles:importAttribute name="javascripts"/>
-<c:forEach var="script" items="${javascripts}">
-	<script src="<c:url value="${script}"/>"></script>
-</c:forEach>
+
 </body>
 </html>
