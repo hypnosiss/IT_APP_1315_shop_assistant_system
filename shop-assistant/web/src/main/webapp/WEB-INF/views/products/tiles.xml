@@ -7,6 +7,7 @@
     <definition name="products/list" extends="base.definition">
         <put-attribute name="body" value="/WEB-INF/views/products/list.jsp" />
         <put-attribute name="pageTitle" value="Products" />
+        <put-attribute name="activeTab" value="products" />
         <put-list-attribute name="javascripts">
             <add-attribute value="/assets/js/jquery-1.11.1.js" />
             <add-attribute value="/assets/js/bootstrap.js" />

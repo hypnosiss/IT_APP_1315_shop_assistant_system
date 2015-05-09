@@ -4,10 +4,10 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
-    <definition name="orders/list" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/orders/list.jsp" />
-        <put-attribute name="pageTitle" value="Orders" />
-        <put-attribute name="activeTab" value="orders" />
+    <definition name="settings/list" extends="base.definition">
+        <put-attribute name="body" value="/WEB-INF/views/settings/list.jsp" />
+        <put-attribute name="pageTitle" value="Settings" />
+        <put-attribute name="activeTab" value="settings" />
     </definition>
 
 </tiles-definitions>

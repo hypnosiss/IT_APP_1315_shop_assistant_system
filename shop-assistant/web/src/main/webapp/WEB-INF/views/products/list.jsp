@@ -19,7 +19,16 @@
             <tr>
                 <td style="width: 20px;"><input type="checkbox" /></td>
                 <td>${userProduct.product.ean}</td>
-                <td>${userProduct.product.name}</td>
+                <td>
+                    <c:choose>
+                        <c:when test="${empty userProduct.name}">
+                            ${userProduct.product.name}
+                        </c:when>
+                        <c:otherwise>
+                            ${userProduct.name}
+                        </c:otherwise>
+                    </c:choose>
+                </td>
                 <td>${userProduct.product.brand}</td>
                 <td style="font-size: 16px; text-align: center;">
                     <c:choose>

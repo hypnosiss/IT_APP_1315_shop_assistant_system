@@ -26,8 +26,6 @@ public class ProductsController {
     public String list(Model model) {
         List<UserProduct> userProducts = userProductDao.getList();
 
-        //notificationsService.addInfoMessage("Test info message");
-
         Collections.sort(userProducts, new Comparator<UserProduct>() {
             public int compare(UserProduct userProduct1, UserProduct userProduct2) {
                 return userProduct2.getStatus().getValue().compareTo(userProduct1.getStatus().getValue());
@@ -40,8 +38,7 @@ public class ProductsController {
     }
 
     @RequestMapping(value = { "/newOrder" }, method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public @ResponseBody
-    OrderSummaryItem[] newOrder(@RequestBody String[] eans, HttpServletRequest request) {
+    public @ResponseBody OrderSummaryItem[] newOrder(@RequestBody String[] eans, HttpServletRequest request) {
         List<UserProduct> userProducts  = new LinkedList<UserProduct>();
         for(String ean : eans) {
             UserProduct userProduct = userProductDao.getUserProductForEAN(ean);
