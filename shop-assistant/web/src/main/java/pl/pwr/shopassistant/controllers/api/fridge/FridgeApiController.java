@@ -1,4 +1,4 @@
-package pl.pwr.shopassistant.controllers.api;
+package pl.pwr.shopassistant.controllers.api.fridge;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;

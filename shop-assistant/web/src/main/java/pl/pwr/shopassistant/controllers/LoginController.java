@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Controller
+@Transactional
 public class LoginController {
 
 	@Autowired
@@ -45,7 +46,6 @@ public class LoginController {
 		return new ModelAndView("login", modelAttributes);
 	}
 
-	@Transactional
 	@RequestMapping(value="/register", method = RequestMethod.POST)
 	public ModelAndView register(@ModelAttribute UserRegisterForm userRegisterForm, BindingResult bindingResult) {
 

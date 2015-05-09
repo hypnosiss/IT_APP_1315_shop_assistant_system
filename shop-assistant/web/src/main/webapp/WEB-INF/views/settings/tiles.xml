@@ -4,8 +4,8 @@
        "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 <tiles-definitions>
 
-    <definition name="settings/list" extends="base.definition">
-        <put-attribute name="body" value="/WEB-INF/views/settings/list.jsp" />
+    <definition name="settings/change" extends="base.definition">
+        <put-attribute name="body" value="/WEB-INF/views/settings/change.jsp" />
         <put-attribute name="pageTitle" value="Settings" />
         <put-attribute name="activeTab" value="settings" />
     </definition>

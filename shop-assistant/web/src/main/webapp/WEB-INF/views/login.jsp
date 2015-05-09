@@ -39,6 +39,9 @@
         <label>Phone:</label>
         <form:input path="phone" class="form-control" />
         <br/>
+        <span style="color: red;">*</span> - required
+        <br/>
+        <br/>
         <button class="btn btn-primary btn-alt" type="submit"><span class="glyphicon glyphicon-user"></span> Create account </button>
     </form:form>
 </div>
