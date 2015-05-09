@@ -73,7 +73,7 @@
 	<div class="container">
 		<div class="row">
 			<div class="col-md-12">
-				<h4 class="page-head-line"><tiles:getAsString name="pageTitle" /></h4>
+				<h4 id="pageTitle" class="page-head-line"><tiles:getAsString name="pageTitle" /></h4>
 			</div>
 		</div>
 

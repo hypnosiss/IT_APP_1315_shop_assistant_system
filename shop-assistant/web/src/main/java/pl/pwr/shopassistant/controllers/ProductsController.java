@@ -33,32 +33,7 @@ public class ProductsController {
         });
 
         model.addAttribute("userProducts", userProducts);
-        model.addAttribute("orderStage", 0);
         return "products/list";
-    }
-
-    @RequestMapping(value = { "/newOrder" }, method = RequestMethod.POST, consumes="application/json", produces = "application/json")
-    public @ResponseBody OrderSummaryItem[] newOrder(@RequestBody String[] eans, HttpServletRequest request) {
-        List<UserProduct> userProducts  = new LinkedList<UserProduct>();
-        for(String ean : eans) {
-            UserProduct userProduct = userProductDao.getUserProductForEAN(ean);
-            if(null != userProduct) {
-                userProducts.add(userProduct);
-            }
-        }
-
-        Collections.sort(userProducts, new Comparator<UserProduct>() {
-            public int compare(UserProduct userProduct1, UserProduct userProduct2) {
-                return userProduct2.getStatus().getValue().compareTo(userProduct1.getStatus().getValue());
-            }
-        });
-
-        OrderSummaryItem[] items = new OrderSummaryItem[userProducts.size()];
-        for(int i = 0; i < userProducts.size(); i++) {
-            items[i] = new OrderSummaryItem(userProducts.get(i));
-        }
-
-        return items;
     }
 
 }
