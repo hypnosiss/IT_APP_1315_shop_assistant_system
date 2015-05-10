@@ -11,5 +11,11 @@
 
     <artifactId>fridge-simulator</artifactId>
 
-
+    <dependencies>
+        <dependency>
+            <groupId>pl.pwr.shop-assistant</groupId>
+            <artifactId>fridge-api-client</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
 </project>
