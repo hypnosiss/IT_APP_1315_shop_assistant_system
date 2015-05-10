@@ -17,11 +17,13 @@ import pl.pwr.shopassistant.entities.Shop;
 import pl.pwr.shopassistant.entities.User;
 import pl.pwr.shopassistant.entities.UserProduct;
 import pl.pwr.shopassistant.shopapiclient.ShopApiClient;
+import pl.pwr.shopassistant.shopapiclient.ShopProduct;
 import pl.pwr.shopassistant.shopapiclient.TimePeriod;
 import pl.pwr.shopassistant.model.*;
 import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.auth.AuthService;
 import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
+import pl.pwr.shopassistant.shopapiclient.tesco.TescoApiClient;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -91,10 +93,21 @@ public class OrdersController {
             }
         }
         //TODO: check if quantity > 0
+        MockApiClient mockApiClient = new MockApiClient();
+
+        Set<String> eans = new HashSet<String>();
+        for(OrderSummaryItem item : items) {
+            eans.add(item.getEan());
+        }
+
         List<Shop> shops  = shopDao.getList();
         OrderSummaryShop[] shopsArray = new OrderSummaryShop[shops.size()];
         for(int i = 0; i < shops.size(); i++) {
-            shopsArray[i] = new OrderSummaryShop(shops.get(i));
+            OperationResult operationResult = mockApiClient.findProductsByEANs(eans);
+            if (operationResult.getResultCode() == 0) {
+                shopsArray[i] = new OrderSummaryShop(shops.get(i),
+                        (List<ShopProduct>) operationResult.getValue(ShopApiClient.FIND_PRODUCTS_BY_EANS__PRODUCTS));
+            }
         }
         return shopsArray;
     }

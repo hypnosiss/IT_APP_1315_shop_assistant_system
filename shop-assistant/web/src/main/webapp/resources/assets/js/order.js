@@ -22,6 +22,7 @@ $(document).ready(function(){
             }
         });
         if(eans.length > 0) {
+            $('#search-product').remove();
             var buttonParent = $('#neworder').parent();
             buttonParent.empty();
             var prev = $('<button id="prev" class="btn btn-xs btn-danger">Previous</button>');
@@ -39,6 +40,9 @@ $(document).ready(function(){
 
 function form1(items) {
     changeTitle("Making order 1/4");
+
+    $('#productsTable').find('thead').html('');
+    $('#productsTable').find('tbody').html('');
 
     products = items;
 
@@ -95,6 +99,9 @@ function decrement(rowString) {
 function form2(items) {
     changeTitle("Making order 2/4");
 
+    $('#productsTable').find('thead').html('');
+    $('#productsTable').find('tbody').html('');
+
     var thead = '';
     thead += '<tr>';
     thead += '<th></th>';
@@ -111,8 +118,8 @@ function form2(items) {
         tbody += '<td>' + '<input type="radio" name="shop" value="' + i + '"/>' + '</td>';
         tbody += '<td>' + items[i].name + '</td>';
         tbody += '<td>' + items[i].address + '</td>';
-        tbody += '<td>' + items[i].products + '</td>';
-        tbody += '<td>' + items[i].price + '</td>';
+        tbody += '<td>' + items[i].products.length + "/" + eans.length + '</td>';
+        tbody += '<td>' + items[i].price + "zł" + '</td>';
         tbody += '</tr>';
     }
     $('#productsTable').find('tbody').html(tbody);
@@ -140,6 +147,9 @@ function form3(items) {
     if(div) {
         div.remove();
     }
+
+    $('#productsTable').find('thead').html('');
+    $('#productsTable').find('tbody').html('');
 
     var thead = '';
     thead += '<tr>';
