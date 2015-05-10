@@ -1,4 +1,4 @@
-package pl.pwr.shopassistant.fridgeapiclient;
+package pl.pwr.shopassistant.shopapiclient;
 
 import pl.pwr.shopassistant.operationresult.OperationResult;
 

@@ -1,4 +1,4 @@
-package pl.pwr.shopassistant.fridgeapiclient;
+package pl.pwr.shopassistant.shopapiclient;
 
 import lombok.Getter;
 import lombok.Setter;

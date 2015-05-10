@@ -45,7 +45,7 @@
     });
 </script>
 
-<div style="float: right">
+<div id="search-product" style="float: right">
     <div style="float: left;">
         <label>Add product: </label>&nbsp;&nbsp;
     </div>

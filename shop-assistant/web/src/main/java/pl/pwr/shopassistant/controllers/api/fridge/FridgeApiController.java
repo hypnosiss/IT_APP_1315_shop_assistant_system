@@ -15,10 +15,9 @@ import pl.pwr.shopassistant.entities.UserProduct;
 import pl.pwr.shopassistant.entities.enums.EventType;
 import pl.pwr.shopassistant.entities.enums.UserProductStatus;
 import pl.pwr.shopassistant.forms.ProductStatusChangeForm;
-import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
-import pl.pwr.shopassistant.fridgeapiclient.ShopProduct;
-import pl.pwr.shopassistant.fridgeapiclient.tesco.MockApiClient;
-import pl.pwr.shopassistant.fridgeapiclient.tesco.TescoApiClient;
+import pl.pwr.shopassistant.shopapiclient.ShopApiClient;
+import pl.pwr.shopassistant.shopapiclient.ShopProduct;
+import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
 import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.hash.HashService;
 

@@ -6,14 +6,12 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import pl.pwr.shopassistant.apiutils.ResponseDTO;
-import pl.pwr.shopassistant.controllers.api.fridge.ProductStatus;
 import pl.pwr.shopassistant.dao.ProductDao;
 import pl.pwr.shopassistant.entities.Product;
 import pl.pwr.shopassistant.entities.enums.UserProductStatus;
-import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
-import pl.pwr.shopassistant.fridgeapiclient.ShopProduct;
-import pl.pwr.shopassistant.fridgeapiclient.tesco.MockApiClient;
-import pl.pwr.shopassistant.fridgeapiclient.tesco.TescoApiClient;
+import pl.pwr.shopassistant.shopapiclient.ShopApiClient;
+import pl.pwr.shopassistant.shopapiclient.ShopProduct;
+import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
 import pl.pwr.shopassistant.model.AddProductForm;
 import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.auth.AuthService;
@@ -23,7 +21,6 @@ import pl.pwr.shopassistant.entities.UserProduct;
 import pl.pwr.shopassistant.entities.comparators.UserProductsByStatusComparator;
 import pl.pwr.shopassistant.services.notifications.NotificationsService;
 
-import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Controller

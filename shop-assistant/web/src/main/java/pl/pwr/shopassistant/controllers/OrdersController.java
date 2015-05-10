@@ -4,7 +4,6 @@ import org.joda.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,19 +11,17 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import pl.pwr.shopassistant.dao.ProductDao;
 import pl.pwr.shopassistant.dao.ShopDao;
-import pl.pwr.shopassistant.dao.UserDao;
 import pl.pwr.shopassistant.dao.UserProductDao;
 import pl.pwr.shopassistant.entities.Product;
 import pl.pwr.shopassistant.entities.Shop;
 import pl.pwr.shopassistant.entities.User;
 import pl.pwr.shopassistant.entities.UserProduct;
-import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
-import pl.pwr.shopassistant.fridgeapiclient.TimePeriod;
-import pl.pwr.shopassistant.fridgeapiclient.tesco.MockApiClient;
-import pl.pwr.shopassistant.fridgeapiclient.tesco.TescoApiClient;
+import pl.pwr.shopassistant.shopapiclient.ShopApiClient;
+import pl.pwr.shopassistant.shopapiclient.TimePeriod;
 import pl.pwr.shopassistant.model.*;
 import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.auth.AuthService;
+import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -34,9 +31,6 @@ import java.util.*;
 @Transactional
 @RequestMapping(value = "/orders")
 public class OrdersController {
-
-    @Autowired
-    private UserDao userDao;
 
     @Autowired
     private ProductDao productDao;
@@ -107,22 +101,22 @@ public class OrdersController {
 
     @RequestMapping(value = { "/new3" }, method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public @ResponseBody
-    TimeSlot[] new3(@RequestBody String shopName, HttpServletRequest request) {
+    TimeSlot[] new3(@RequestBody String shopName, HttpServletRequest request) throws Exception {
         MockApiClient mockApiClient = new MockApiClient();
         OperationResult operationResult = mockApiClient.getDeliveryTimetable();
         if (operationResult.getResultCode() != 0) {
-            //@TODO
+            return new TimeSlot[0];
         }
-
         Map<LocalDate, List<TimePeriod>> timetable =
                 (Map<LocalDate, List<TimePeriod>>) operationResult.getValue(ShopApiClient.GET_DELIVERY_TIMETABLE__TIMETABLE);
 
-        //Shop shop = shopDao.getByName(shopName);
-        //TescoApiClient client = new TescoApiClient();
-        //List<TimeSlot> timeSlots = client.getDeliveryTimetable();
-
         List<TimeSlot> timeSlots = new ArrayList<TimeSlot>();
-        timeSlots.add(new TimeSlot("aaa", "bbb", "ccc"));
+        for(Map.Entry<LocalDate, List<TimePeriod>> entry : timetable.entrySet()) {
+            for(TimePeriod timePeriod : entry.getValue()) {
+                TimeSlot slot = new TimeSlot(entry.getKey(), timePeriod);
+                timeSlots.add(slot);
+            }
+        }
         TimeSlot[] timeSlotsArray = timeSlots.toArray(new TimeSlot[timeSlots.size()]);
         return timeSlotsArray;
     }

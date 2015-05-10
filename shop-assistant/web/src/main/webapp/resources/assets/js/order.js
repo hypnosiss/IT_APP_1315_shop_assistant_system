@@ -5,6 +5,7 @@ var products;
 var shop;
 var timeSlot;
 
+
 function changeTitle(content) {
     $('#pageTitle').text(content);
 }
@@ -21,21 +22,15 @@ $(document).ready(function(){
             }
         });
         if(eans.length > 0) {
+            var buttonParent = $('#neworder').parent();
+            buttonParent.empty();
+            var prev = $('<button id="prev" class="btn btn-xs btn-danger">Previous</button>');
+            prev.appendTo(buttonParent);
+            var next = $('<button id="next" class="btn btn-xs btn-danger">Next</button>');
+            next.appendTo(buttonParent);
+
             var postData = JSON.stringify(eans);
-            $.ajax({
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json'
-                },
-                type: "POST",
-                dataType: "json",
-                data: postData,
-                url: url + "1",
-                success: form1,
-                error: function(jqXHR, textStatus, errorThrown){
-                    console.log(jqXHR, textStatus, errorThrown);
-                }
-            });
+            makeAjaxRequest(url + "1", form1, "POST", postData);
         } else {
             //error
         }
@@ -44,12 +39,6 @@ $(document).ready(function(){
 
 function form1(items) {
     changeTitle("Making order 1/4");
-    var button = $('#neworder');
-    var prev = $('<button id="prev" class="btn btn-xs btn-danger">Previous</button>');
-    prev.appendTo(button.parent());
-    var next = $('<button id="next" class="btn btn-xs btn-danger">Next</button>');
-    next.appendTo(button.parent());
-    button.remove();
 
     products = items;
 
@@ -68,29 +57,20 @@ function form1(items) {
         tbody += '<td>' + items[i].ean + '</td>';
         tbody += '<td>' + items[i].name + '</td>';
         tbody += '<td>' + items[i].brand + '</td>';
-        tbody += '<td><input type="button" class="fa fa-angle-left" value="&#xf011" onClick="decrement(\'' + i + '\')" /><span>' + items[i].quantity + '</span><input type="button" class="fa fa-angle-right" value="&#xf011" onClick="increment(\'' + i + '\')" /></td>';
+        tbody += '<td><input type="button" class="fa fa-angle-left" value="&#xf011" onClick="decrement(\'' + i + '\')" /><span>' + products[i].quantity + '</span><input type="button" class="fa fa-angle-right" value="&#xf011" onClick="increment(\'' + i + '\')" /></td>';
         tbody += '</tr>';
     }
     $('#productsTable').find('tbody').html(tbody);
 
+    $('#prev').unbind('click');
+    $('#prev').click(function(){
+
+    });
+
     $('#next').unbind('click');
     $("#next").click(function(){
-        var postData = JSON.stringify(items);
-
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            type: "POST",
-            dataType: "json",
-            data: postData,
-            url: url + "2",
-            success: form2,
-            error: function(jqXHR, textStatus, errorThrown){
-                console.log(jqXHR, textStatus, errorThrown);
-            }
-        });
+        var postData = JSON.stringify(products);
+        makeAjaxRequest(url + "2", form2, "POST", postData);
     });
 }
 
@@ -138,31 +118,28 @@ function form2(items) {
     $('#productsTable').find('tbody').html(tbody);
     $('input[type=radio]:first', '#productsTable tbody').attr('checked', true);
 
+    $('#prev').unbind('click');
+    $('#prev').click(function(){
+        var postData = JSON.stringify(eans);
+        makeAjaxRequest(url + "1", form1, "POST", postData);
+    });
+
     $('#next').unbind('click');
     $("#next").click(function(){
         var shopIdx = $("input[type='radio'][name='shop']:checked").val();
         shop = items[shopIdx];
         var postData = JSON.stringify(shop.shopName);
-
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            type: "POST",
-            dataType: "json",
-            data: postData,
-            url: url + "3",
-            success: form3,
-            error: function(jqXHR, textStatus, errorThrown){
-                console.log(jqXHR, textStatus, errorThrown);
-            }
-        });
+        makeAjaxRequest(url + "3", form3, "POST", postData);
     });
 }
 
 function form3(items) {
     changeTitle("Making order 3/4");
+
+    var div =  $('#summary');
+    if(div) {
+        div.remove();
+    }
 
     var thead = '';
     thead += '<tr>';
@@ -185,24 +162,17 @@ function form3(items) {
     $('#productsTable').find('tbody').html(tbody);
     $('input[type=radio]:first', '#productsTable tbody').attr('checked', true);
 
+    $('#prev').unbind('click');
+    $('#prev').click(function(){
+        var postData = JSON.stringify(products);
+        makeAjaxRequest(url + "2", form2, "POST", postData);
+    });
+
     $('#next').unbind('click');
     $("#next").click(function(){
         var itemIdx = $("input[type='radio'][name='timeslot']:checked").val();
         timeSlot = items[itemIdx];
-
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            type: "GET",
-            dataType: "json",
-            url: url + "4",
-            success: form4,
-            error: function(jqXHR, textStatus, errorThrown){
-                console.log(jqXHR, textStatus, errorThrown);
-            }
-        });
+        makeAjaxRequest(url + "4", form4, "GET");
     });
 }
 
@@ -211,60 +181,71 @@ function form4(items) {
     $('#productsTable').find('thead').html('');
     $('#productsTable').find('tbody').html('');
 
-    var parent = $('#productsTable').parent()
+    var parent = $('#productsTable').parent();
+    var div =  $('<div id="summary">');
+    div.appendTo(parent);
 
     $('<h4>', {
         text: "Products:"
-    }).appendTo($('#productsTable').parent());
+    }).appendTo(div);
     $.each(products, function(idx, product){
         $('<p>', {
             text:  product.quantity + " of " + product.name
-        }).appendTo(parent);
+        }).appendTo(div);
     });
 
     $('<h4>', {
         text: "Shop:"
-    }).appendTo(parent);
+    }).appendTo(div);
     $('<p>', {
         text: shop.name + ", " + shop.address
-    }).appendTo(parent);
+    }).appendTo(div);
 
     $('<h4>', {
         text: "Delivery address:"
-    }).appendTo(parent);
+    }).appendTo(div);
     $('<p>', {
         text: items.value
-    }).appendTo(parent);
+    }).appendTo(div);
 
     $('<h4>', {
         text: "Delivery date and time:"
-    }).appendTo(parent);
+    }).appendTo(div);
     $('<p>', {
         text: timeSlot.date + " between " +  timeSlot.from + " and " + timeSlot.to
-    }).appendTo(parent);
+    }).appendTo(div);
+
+    $('#prev').unbind('click');
+    $('#prev').click(function(){
+        var postData = JSON.stringify(shop.shopName);
+        makeAjaxRequest(url + "3", form3, "POST", postData);
+    });
 
     $('#next').unbind('click');
     $("#next").click(function(){
         var order = {eans:eans, shopName:shop.shopName, timeSlot:timeSlot};
         var postData = JSON.stringify(order);
-
-        $.ajax({
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            type: "POST",
-            dataType: "json",
-            data: postData,
-            url: url + "/finalize",
-            success: orderCreated,
-            error: function(jqXHR, textStatus, errorThrown){
-                console.log(jqXHR, textStatus, errorThrown);
-            }
-        });
+        makeAjaxRequest(url + "/finalize", orderCreated, "POST", postData);
     });
 }
 
 function orderCreated() {
 
+}
+
+function makeAjaxRequest(url, callback, type, data) {
+    $.ajax({
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        type: type,
+        dataType: "json",
+        data: data,
+        url: url,
+        success: callback,
+        error: function(jqXHR, textStatus, errorThrown){
+            console.log(jqXHR, textStatus, errorThrown);
+        }
+    });
 }

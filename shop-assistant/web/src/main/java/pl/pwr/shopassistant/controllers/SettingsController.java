@@ -3,7 +3,6 @@ package pl.pwr.shopassistant.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -44,7 +43,7 @@ public class SettingsController {
         changeSettingsForm.setAddress(currentUser.getAddress());
         changeSettingsForm.setPhone(currentUser.getPhone());
 
-        Map<String, Object> modelAttributes = new HashMap<>();
+        Map<String, Object> modelAttributes = new HashMap<String, Object>();
         modelAttributes.put("changeSettingsForm", changeSettingsForm);
 
         return new ModelAndView("settings/change", modelAttributes);

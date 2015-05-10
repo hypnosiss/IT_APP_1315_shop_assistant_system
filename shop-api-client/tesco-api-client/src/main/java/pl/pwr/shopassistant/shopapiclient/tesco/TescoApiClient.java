@@ -1,13 +1,12 @@
-package pl.pwr.shopassistant.fridgeapiclient.tesco;
+package pl.pwr.shopassistant.shopapiclient.tesco;
 
 import com.sun.jersey.api.client.Client;
 import com.sun.jersey.api.client.ClientResponse;
 import com.sun.jersey.api.client.WebResource;
-import org.springframework.stereotype.Service;
 import pl.pwr.shopassistant.apiutils.ResponseDTO;
 import pl.pwr.shopassistant.operationresult.OperationResult;
-import pl.pwr.shopassistant.fridgeapiclient.ShopProduct;
-import pl.pwr.shopassistant.fridgeapiclient.ShopApiClient;
+import pl.pwr.shopassistant.shopapiclient.ShopProduct;
+import pl.pwr.shopassistant.shopapiclient.ShopApiClient;
 
 import java.util.Set;
 

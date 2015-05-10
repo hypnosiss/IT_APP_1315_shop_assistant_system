@@ -2,8 +2,11 @@ package pl.pwr.shopassistant.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.joda.time.LocalDate;
+import pl.pwr.shopassistant.shopapiclient.TimePeriod;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class TimeSlot implements Serializable {
     @Getter @Setter
@@ -18,9 +21,10 @@ public class TimeSlot implements Serializable {
     public TimeSlot() {
     }
 
-    public TimeSlot(String date, String from, String to) {
-        this.date = date;
-        this.from = from;
-        this.to = to;
+    public TimeSlot(LocalDate date, TimePeriod time) {
+        this.date = date.toString();
+        this.from = time.getFrom().toString();
+        this.to = time.getTo().toString();
     }
+
 }
