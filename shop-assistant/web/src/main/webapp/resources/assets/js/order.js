@@ -63,7 +63,7 @@ function form1(items) {
         tbody += '<td>' + items[i].ean + '</td>';
         tbody += '<td>' + items[i].name + '</td>';
         tbody += '<td>' + items[i].brand + '</td>';
-        tbody += '<td><input type="button" class="fa fa-angle-left" value="&#xf011" onClick="decrement(\'' + i + '\')" /><span>' + products[i].quantity + '</span><input type="button" class="fa fa-angle-right" value="&#xf011" onClick="increment(\'' + i + '\')" /></td>';
+        tbody += '<td><button type="button" class="glyphicon glyphicon-chevron-left" onClick="decrement(' + i + ')"></button><span>' + products[i].quantity + '</span><button type="button" class="glyphicon glyphicon-chevron-right" onClick="increment(' + i + ')"></button></td>';
         tbody += '</tr>';
     }
     $('#productsTable').find('tbody').html(tbody);
