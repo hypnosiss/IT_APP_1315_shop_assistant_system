@@ -2,6 +2,7 @@ package pl.pwr.shopassistant.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import pl.pwr.shopassistant.entities.Product;
 import pl.pwr.shopassistant.entities.UserProduct;
 
 import java.io.Serializable;
@@ -25,9 +26,13 @@ public class OrderSummaryItem implements Serializable {
     }
 
     public OrderSummaryItem(UserProduct userProduct) {
-        ean = userProduct.getProduct().getEan();
+        Product product = userProduct.getProduct();
+        ean = product.getEan();
         quantity = userProduct.getQuantity();
+        brand = product.getBrand();
         name = userProduct.getName();
-        brand = userProduct.getProduct().getBrand();
+        if(null == name || name.equals("")) {
+            name = product.getName();
+        }
     }
 }

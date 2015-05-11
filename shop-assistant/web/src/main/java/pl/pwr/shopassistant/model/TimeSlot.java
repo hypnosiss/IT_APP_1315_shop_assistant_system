@@ -11,8 +11,8 @@ import java.io.Serializable;
 import java.util.List;
 
 public class TimeSlot implements Serializable {
-    private static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-    private static final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("hh:mm");
+    public static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
+    public static final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("hh:mm");
 
     @Getter @Setter
     private String date;

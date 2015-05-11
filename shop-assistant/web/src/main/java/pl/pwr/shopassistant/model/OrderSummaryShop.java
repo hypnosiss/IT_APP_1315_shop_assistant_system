@@ -37,7 +37,7 @@ public class OrderSummaryShop implements Serializable {
         for(int i = 0; i < shopProducts.size(); i++) {
             OrderSummaryItem item = new OrderSummaryItem();
             item.setName(shopProducts.get(i).getName());
-            item.setBrand(shopProducts.get(i).getName());
+            item.setBrand(shopProducts.get(i).getBrand());
             products[i] = item;
             bigPrice = bigPrice.add(shopProducts.get(i).getPrice());
         }

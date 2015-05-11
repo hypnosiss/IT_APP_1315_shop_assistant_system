@@ -39,6 +39,8 @@ $(document).ready(function(){
 });
 
 function form1(items) {
+    $('#prev').unbind('click');
+    $('#next').unbind('click');
     changeTitle("Making order 1/4");
 
     $('#productsTable').find('thead').html('');
@@ -66,12 +68,10 @@ function form1(items) {
     }
     $('#productsTable').find('tbody').html(tbody);
 
-    $('#prev').unbind('click');
     $('#prev').click(function(){
-
+        $(location).attr('href', 'products');
     });
 
-    $('#next').unbind('click');
     $("#next").click(function(){
         var postData = JSON.stringify(products);
         makeAjaxRequest(url + "2", form2, "POST", postData);
@@ -97,6 +97,8 @@ function decrement(rowString) {
 }
 
 function form2(items) {
+    $('#prev').unbind('click');
+    $('#next').unbind('click');
     changeTitle("Making order 2/4");
 
     $('#productsTable').find('thead').html('');
@@ -125,13 +127,11 @@ function form2(items) {
     $('#productsTable').find('tbody').html(tbody);
     $('input[type=radio]:first', '#productsTable tbody').attr('checked', true);
 
-    $('#prev').unbind('click');
     $('#prev').click(function(){
         var postData = JSON.stringify(eans);
         makeAjaxRequest(url + "1", form1, "POST", postData);
     });
 
-    $('#next').unbind('click');
     $("#next").click(function(){
         var shopIdx = $("input[type='radio'][name='shop']:checked").val();
         shop = items[shopIdx];
@@ -141,6 +141,8 @@ function form2(items) {
 }
 
 function form3(items) {
+    $('#prev').unbind('click');
+    $('#next').unbind('click');
     changeTitle("Making order 3/4");
 
     var div =  $('#summary');
@@ -172,13 +174,11 @@ function form3(items) {
     $('#productsTable').find('tbody').html(tbody);
     $('input[type=radio]:first', '#productsTable tbody').attr('checked', true);
 
-    $('#prev').unbind('click');
     $('#prev').click(function(){
         var postData = JSON.stringify(products);
         makeAjaxRequest(url + "2", form2, "POST", postData);
     });
 
-    $('#next').unbind('click');
     $("#next").click(function(){
         var itemIdx = $("input[type='radio'][name='timeslot']:checked").val();
         timeSlot = items[itemIdx];
@@ -187,6 +187,8 @@ function form3(items) {
 }
 
 function form4(items) {
+    $('#prev').unbind('click');
+    $('#next').unbind('click');
     changeTitle("Making order 4/4");
     $('#productsTable').find('thead').html('');
     $('#productsTable').find('tbody').html('');
@@ -225,22 +227,21 @@ function form4(items) {
         text: timeSlot.date + " between " +  timeSlot.from + " and " + timeSlot.to
     }).appendTo(div);
 
-    $('#prev').unbind('click');
     $('#prev').click(function(){
         var postData = JSON.stringify(shop.shopName);
         makeAjaxRequest(url + "3", form3, "POST", postData);
     });
 
-    $('#next').unbind('click');
+
     $("#next").click(function(){
-        var order = {eans:eans, shopName:shop.shopName, timeSlot:timeSlot};
-        var postData = JSON.stringify(order);
+        var orderSummary = {eans: eans, shopName: shop.name, timeSlot: timeSlot};
+        var postData = JSON.stringify(orderSummary);
         makeAjaxRequest(url + "/finalize", orderCreated, "POST", postData);
     });
 }
 
 function orderCreated() {
-
+    $(location).attr('href', 'orders');
 }
 
 function makeAjaxRequest(url, callback, type, data) {
