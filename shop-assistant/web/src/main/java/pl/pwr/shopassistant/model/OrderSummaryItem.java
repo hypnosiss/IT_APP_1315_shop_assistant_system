@@ -6,6 +6,7 @@ import pl.pwr.shopassistant.entities.Product;
 import pl.pwr.shopassistant.entities.UserProduct;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.List;
 
 public class OrderSummaryItem implements Serializable {
@@ -22,6 +23,9 @@ public class OrderSummaryItem implements Serializable {
     @Getter @Setter
     private String brand;
 
+    @Getter @Setter
+    private double price;
+
     public OrderSummaryItem() {
     }
 
@@ -35,4 +39,5 @@ public class OrderSummaryItem implements Serializable {
             name = product.getName();
         }
     }
+
 }

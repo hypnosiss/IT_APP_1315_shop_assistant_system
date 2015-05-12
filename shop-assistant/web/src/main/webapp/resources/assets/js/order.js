@@ -193,6 +193,10 @@ function form4(items) {
     $('#productsTable').find('thead').html('');
     $('#productsTable').find('tbody').html('');
 
+    var div =  $('#summary');
+    if(div) {
+        div.remove();
+    }
     var parent = $('#productsTable').parent();
     var div =  $('<div id="summary">');
     div.appendTo(parent);

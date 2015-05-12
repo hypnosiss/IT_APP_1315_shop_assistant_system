@@ -12,7 +12,7 @@ import java.util.List;
 
 public class TimeSlot implements Serializable {
     public static final DateTimeFormatter dateFormatter = DateTimeFormat.forPattern("yyyy-MM-dd");
-    public static final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("hh:mm");
+    public static final DateTimeFormatter timeFormatter = DateTimeFormat.forPattern("HH:mm");
 
     @Getter @Setter
     private String date;

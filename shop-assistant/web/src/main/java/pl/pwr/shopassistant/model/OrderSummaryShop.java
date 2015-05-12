@@ -28,20 +28,14 @@ public class OrderSummaryShop implements Serializable {
     public OrderSummaryShop() {
     }
 
-    public OrderSummaryShop(Shop shop, List<ShopProduct> shopProducts) {
+    public OrderSummaryShop(Shop shop, OrderSummaryItem[] items) {
         name = shop.getName();
         address = shop.getAddress();
-        products = new OrderSummaryItem[shopProducts.size()];
+        products = items;
 
-        BigDecimal bigPrice = new BigDecimal(0.0);
-        for(int i = 0; i < shopProducts.size(); i++) {
-            OrderSummaryItem item = new OrderSummaryItem();
-            item.setName(shopProducts.get(i).getName());
-            item.setBrand(shopProducts.get(i).getBrand());
-            products[i] = item;
-            bigPrice = bigPrice.add(shopProducts.get(i).getPrice());
+        price = 0.0;
+        for(OrderSummaryItem item : items) {
+            price += item.getPrice() * item.getQuantity();
         }
-
-        price = bigPrice.doubleValue();
     }
 }

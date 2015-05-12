@@ -1,6 +1,5 @@
 package pl.pwr.shopassistant.controllers;
 
-import org.joda.time.DateTime;
 import org.joda.time.LocalDate;
 import org.joda.time.LocalTime;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,16 +89,16 @@ public class OrdersController {
     @RequestMapping(value = { "/new2" }, method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public @ResponseBody
     OrderSummaryShop[] new2(@RequestBody OrderSummaryItem[] items, HttpServletRequest request) {
+        User user = authService.getCurrentUser();
+
         for(OrderSummaryItem item : items) {
             Product product = productDao.findProductByEan(item.getEan());
-            User user = authService.getCurrentUser();
             UserProduct userProduct = userProductDao.findByUserAndProduct(user, product);
             if (null != userProduct) {
                 userProduct.setQuantity(item.getQuantity());
                 userProductDao.update(userProduct);
             }
         }
-        //TODO: check if quantity > 0
         MockApiClient mockApiClient = new MockApiClient();
 
         Set<String> eans = new HashSet<String>();
@@ -112,9 +111,18 @@ public class OrdersController {
         for(int i = 0; i < shops.size(); i++) {
             OperationResult operationResult = mockApiClient.findProductsByEANs(eans);
             if (operationResult.getResultCode() == 0) {
-                //@TODO: multiply by quantity;
-                shopsArray[i] = new OrderSummaryShop(shops.get(i),
-                        (List<ShopProduct>) operationResult.getValue(ShopApiClient.FIND_PRODUCTS_BY_EANS__PRODUCTS));
+                List<ShopProduct> shopProducts = (List<ShopProduct>) operationResult.getValue(ShopApiClient.FIND_PRODUCTS_BY_EANS__PRODUCTS);
+                OrderSummaryItem[] products = new OrderSummaryItem[shopProducts.size()];
+                for(int j = 0; j < shopProducts.size(); j++) {
+                    Product product = productDao.findProductByEan(shopProducts.get(j).getEAN());
+                    UserProduct userProduct = userProductDao.findByUserAndProduct(user, product);
+                    OrderSummaryItem item = new OrderSummaryItem(userProduct);
+                    item.setBrand(shopProducts.get(j).getBrand());
+                    item.setName(shopProducts.get(j).getName());
+                    item.setPrice(shopProducts.get(j).getPrice().doubleValue());
+                    products[j] = item;
+                }
+                shopsArray[i] = new OrderSummaryShop(shops.get(i), products);
             }
         }
         return shopsArray;
@@ -225,8 +233,8 @@ public class OrdersController {
     private class TimeSlotComparator implements Comparator<TimeSlot> {
 
         public int compare(TimeSlot timeSlot1, TimeSlot timeSlot2) {
-            LocalDate date1 = TimeSlot.timeFormatter.parseLocalDate(timeSlot1.getDate());
-            LocalDate date2 = TimeSlot.timeFormatter.parseLocalDate(timeSlot1.getDate());
+            LocalDate date1 = TimeSlot.dateFormatter.parseLocalDate(timeSlot1.getDate());
+            LocalDate date2 = TimeSlot.dateFormatter.parseLocalDate(timeSlot2.getDate());
 
             if(date1.isBefore(date2)) {
                 return -1;
@@ -237,7 +245,7 @@ public class OrdersController {
                 LocalTime time2 = TimeSlot.timeFormatter.parseLocalTime(timeSlot2.getFrom());
                 if(time1.isBefore(time2)) {
                     return -1;
-                } else if (time2.isBefore(time2)) {
+                } else if (time2.isBefore(time1)) {
                     return 1;
                 } else {
                     return 0;
