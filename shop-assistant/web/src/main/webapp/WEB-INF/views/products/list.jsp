@@ -34,7 +34,8 @@
                 cache: false,
                 data: JSON.stringify({ean: ean}),
                 datatype : "json",
-                contentType: "application/json; charset=utf-8",
+                contentType: "application/json; charset=utf-8"
+                contentType: "application/json; charset=utf-8"
             })
             .done(function() {
                 window.location = '/products';
@@ -62,7 +63,7 @@
 <br/>
 
 <div class="table-responsive">
-    <table id="productsTable" class="table table-striped table-bordered table-hover">
+    <table id="productsTable" style="table-layout:fixed;" class="table table-striped table-bordered table-hover">
         <thead>
             <tr>
                 <th></th>

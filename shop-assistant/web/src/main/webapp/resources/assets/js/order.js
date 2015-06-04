@@ -120,12 +120,24 @@ function form2(items) {
         tbody += '<td>' + '<input type="radio" name="shop" value="' + i + '"/>' + '</td>';
         tbody += '<td>' + items[i].name + '</td>';
         tbody += '<td>' + items[i].address + '</td>';
-        tbody += '<td>' + items[i].products.length + "/" + eans.length + '</td>';
+        tbody += '<td><div><a>' + items[i].products.length + "/" + eans.length + '</a><div>' + createProductsSummary(items[i].products) + '</div></div></td>';
         tbody += '<td>' + items[i].price + "zł" + '</td>';
         tbody += '</tr>';
     }
     $('#productsTable').find('tbody').html(tbody);
     $('input[type=radio]:first', '#productsTable tbody').attr('checked', true);
+    $('#productsTable').find('tr').each(function () {
+        var div = $(this).find("div").first();
+        var hidden = div.find("div").first();
+        hidden.slideUp(0);
+        div.hover(
+            function() {
+                hidden.slideDown(100);
+            }, function() {
+                hidden.slideUp(100);
+            });
+    });
+
 
     $('#prev').click(function(){
         var postData = JSON.stringify(eans);
@@ -138,6 +150,15 @@ function form2(items) {
         var postData = JSON.stringify(shop.shopName);
         makeAjaxRequest(url + "3", form3, "POST", postData);
     });
+}
+
+function createProductsSummary(products) {
+    var summary = "";
+    $.each(products, function(idx, product) {
+        summary += product.quantity + " of " + product.name + " for " + product.price * product.quantity;
+        summary += "<br />"
+    });
+    return summary;
 }
 
 function form3(items) {
