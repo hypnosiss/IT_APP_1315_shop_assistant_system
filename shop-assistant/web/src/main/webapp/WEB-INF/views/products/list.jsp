@@ -35,7 +35,6 @@
                 data: JSON.stringify({ean: ean}),
                 datatype : "json",
                 contentType: "application/json; charset=utf-8"
-                contentType: "application/json; charset=utf-8"
             })
             .done(function() {
                 window.location = '/products';
