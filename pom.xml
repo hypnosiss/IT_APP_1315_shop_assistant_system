@@ -18,6 +18,7 @@
         <module>fridge-api-client</module>
         <module>api-utils</module>
         <module>general-services</module>
+        <module>shop-simulator-model</module>
     </modules>
 
     <properties>
