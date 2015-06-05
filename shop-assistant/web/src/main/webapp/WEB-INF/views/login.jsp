@@ -5,9 +5,13 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <c:if test="${not empty sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message}">
-    <div class="alert alert-error fade in">
-        ${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message}
+<div>
+    <div class="col-md-12">
+        <div class="alert alert-danger">
+                ${sessionScope['SPRING_SECURITY_LAST_EXCEPTION'].message}
+        </div>
     </div>
+</div>
 </c:if>
 <div class="col-md-6">
     <h4>Login</h4>

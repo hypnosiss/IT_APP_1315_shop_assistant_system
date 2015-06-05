@@ -51,4 +51,10 @@
             </list>
         </property>
     </bean>
+
+    <!--<bean name="TescoApiClient" class="pl.pwr.shopassistant.shopapiclient.tesco.TescoApiClient">-->
+        <!--<constructor-arg name="host" value="http://localhost:8080/shopsim"/>-->
+    <!--</bean>-->
+
+    <bean name="TescoApiClient" class="pl.pwr.shopassistant.shopapiclient.mock.MockApiClient"/>
 </beans>
