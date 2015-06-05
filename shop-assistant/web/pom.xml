@@ -15,12 +15,12 @@
     <dependencies>
         <dependency>
             <groupId>pl.pwr.shop-assistant</groupId>
-            <artifactId>entities</artifactId>
+            <artifactId>shop-assistant-entities</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>pl.pwr.shop-assistant</groupId>
-            <artifactId>dao</artifactId>
+            <artifactId>shop-assistant-dao</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <dependency>
