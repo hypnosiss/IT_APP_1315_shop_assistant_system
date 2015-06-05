@@ -51,6 +51,10 @@ public class MainWindow extends JFrame {
 
         inButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
+                if (list3.getSelectedIndex() == -1) {
+                    return;
+                }
+
                 String ean = (String) list3.getSelectedValue();
 
                 fridgeApiClient.changeProductStatus(ean, UUID.randomUUID(), ProductStatus.in, new DateTime());
@@ -87,8 +91,11 @@ public class MainWindow extends JFrame {
         });
         outButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
-                String ean = (String) list2.getSelectedValue();
-                ean = ean.split(" ")[0];
+                if (list3.getSelectedIndex() == -1) {
+                    return;
+                }
+
+                String ean = (String) list3.getSelectedValue();
 
                 fridgeProducts.put(ean, fridgeProducts.get(ean) - 1);
 

@@ -17,9 +17,10 @@ import pl.pwr.shopassistant.entities.enums.UserProductStatus;
 import pl.pwr.shopassistant.forms.ProductStatusChangeForm;
 import pl.pwr.shopassistant.shopapiclient.ShopApiClient;
 import pl.pwr.shopassistant.shopapiclient.ShopProduct;
-import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
 import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.hash.HashService;
+import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
+import pl.pwr.shopassistant.shopapiclient.tesco.TescoApiClient;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
@@ -45,6 +46,9 @@ public class FridgeApiController {
     @Autowired
     @Resource(name="sha1HashService")
     private HashService hashService;
+
+    @Autowired
+    private MockApiClient tescoApiClient;
 
 
     @RequestMapping(value = { "/products/{ean}/change-status" }, method = RequestMethod.POST, consumes = "application/json")
@@ -86,9 +90,7 @@ public class FridgeApiController {
             String name = "unknown";
             String brand = "unknown";
 
-//            ShopApiClient shopApiClient = new TescoApiClient("http://localhost:8080");
-            ShopApiClient shopApiClient = new MockApiClient();
-            OperationResult operationResult = shopApiClient.findProductByEAN(ean);
+            OperationResult operationResult = tescoApiClient.findProductByEAN(ean);
             if (operationResult.getResultCode() == 0) {
                 ShopProduct shopProduct =
                         (ShopProduct) operationResult.getValue(ShopApiClient.FIND_PRODUCT_BY_EAN__PRODUCT);

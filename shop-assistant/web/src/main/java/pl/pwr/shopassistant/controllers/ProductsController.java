@@ -11,7 +11,6 @@ import pl.pwr.shopassistant.entities.Product;
 import pl.pwr.shopassistant.entities.enums.UserProductStatus;
 import pl.pwr.shopassistant.shopapiclient.ShopApiClient;
 import pl.pwr.shopassistant.shopapiclient.ShopProduct;
-import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
 import pl.pwr.shopassistant.model.AddProductForm;
 import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.auth.AuthService;
@@ -20,6 +19,8 @@ import pl.pwr.shopassistant.entities.User;
 import pl.pwr.shopassistant.entities.UserProduct;
 import pl.pwr.shopassistant.entities.comparators.UserProductsByStatusComparator;
 import pl.pwr.shopassistant.services.notifications.NotificationsService;
+import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
+import pl.pwr.shopassistant.shopapiclient.tesco.TescoApiClient;
 
 import java.util.*;
 
@@ -39,6 +40,9 @@ public class ProductsController {
 
     @Autowired
     private ProductDao productDao;
+
+    @Autowired
+    private MockApiClient tescoApiClient;
 
 
     @RequestMapping(value = { "", "/", "/list" }, method = RequestMethod.GET)
@@ -67,8 +71,7 @@ public class ProductsController {
             String name = "unknown";
             String brand = "unknown";
 
-            ShopApiClient shopApiClient = new MockApiClient();
-            OperationResult operationResult = shopApiClient.findProductByEAN(ean);
+            OperationResult operationResult = tescoApiClient.findProductByEAN(ean);
             if (operationResult.getResultCode() == 0) {
                 ShopProduct shopProduct =
                         (ShopProduct) operationResult.getValue(ShopApiClient.FIND_PRODUCT_BY_EAN__PRODUCT);

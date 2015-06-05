@@ -19,6 +19,7 @@ import pl.pwr.shopassistant.model.*;
 import pl.pwr.shopassistant.operationresult.OperationResult;
 import pl.pwr.shopassistant.services.auth.AuthService;
 import pl.pwr.shopassistant.shopapiclient.mock.MockApiClient;
+import pl.pwr.shopassistant.shopapiclient.tesco.TescoApiClient;
 
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
@@ -47,6 +48,9 @@ public class OrdersController {
 
     @Autowired
     private AuthService authService;
+
+    @Autowired
+    private MockApiClient tescoApiClient;
 
     @RequestMapping(value = { "", "/" }, method = RequestMethod.GET)
     public String list(Model model) {
@@ -99,8 +103,6 @@ public class OrdersController {
                 userProductDao.update(userProduct);
             }
         }
-        MockApiClient mockApiClient = new MockApiClient();
-
         Set<String> eans = new HashSet<String>();
         for(OrderSummaryItem item : items) {
             eans.add(item.getEan());
@@ -109,7 +111,7 @@ public class OrdersController {
         List<Shop> shops  = shopDao.getList();
         OrderSummaryShop[] shopsArray = new OrderSummaryShop[shops.size()];
         for(int i = 0; i < shops.size(); i++) {
-            OperationResult operationResult = mockApiClient.findProductsByEANs(eans);
+            OperationResult operationResult = tescoApiClient.findProductsByEANs(eans);
             if (operationResult.getResultCode() == 0) {
                 List<ShopProduct> shopProducts = (List<ShopProduct>) operationResult.getValue(ShopApiClient.FIND_PRODUCTS_BY_EANS__PRODUCTS);
                 OrderSummaryItem[] products = new OrderSummaryItem[shopProducts.size()];
@@ -131,8 +133,7 @@ public class OrdersController {
     @RequestMapping(value = { "/new3" }, method = RequestMethod.POST, consumes="application/json", produces = "application/json")
     public @ResponseBody
     TimeSlot[] new3(@RequestBody String shopName, HttpServletRequest request) throws Exception {
-        MockApiClient mockApiClient = new MockApiClient();
-        OperationResult operationResult = mockApiClient.getDeliveryTimetable();
+        OperationResult operationResult = tescoApiClient.getDeliveryTimetable();
         if (operationResult.getResultCode() != 0) {
             return new TimeSlot[0];
         }
@@ -146,7 +147,7 @@ public class OrdersController {
                 timeSlots.add(slot);
             }
         }
-        Collections.sort(timeSlots, new TimeSlotComparator());
+//        Collections.sort(timeSlots, new TimeSlotComparator());
         TimeSlot[] timeSlotsArray = timeSlots.toArray(new TimeSlot[timeSlots.size()]);
         return timeSlotsArray;
     }
@@ -182,8 +183,7 @@ public class OrdersController {
             eans.add(ean);
         }
 
-        MockApiClient mockApiClient = new MockApiClient();
-        OperationResult operationResult = mockApiClient.findProductsByEANs(eans);
+        OperationResult operationResult = tescoApiClient.findProductsByEANs(eans);
         if (operationResult.getResultCode() != 0) {
             return new JsonString("Could not connect to shop API");
         }
@@ -212,7 +212,7 @@ public class OrdersController {
         order.setOrdersProducts(orderProducts);
 
         //@TODO: placing order in the shop
-        mockApiClient.placeOrder();
+        tescoApiClient.placeOrder(eans);
         if (operationResult.getResultCode() != 0) {
             return new JsonString("Could not connect to shop API");
         }

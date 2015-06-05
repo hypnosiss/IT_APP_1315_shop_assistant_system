@@ -12,14 +12,27 @@ import java.util.*;
 
 public class MockApiClient implements ShopApiClient {
 
+    Map<String, ShopProduct> products = new HashMap<String, ShopProduct>();
+    public MockApiClient() {
+        ShopProduct shopProduct1 = new ShopProduct();
+        shopProduct1.setName("Biszkopty w czekoladzie o smaku pomarańczowym");
+        shopProduct1.setBrand("Wedel");
+        shopProduct1.setEAN("1111111111111");
+        shopProduct1.setPrice(BigDecimal.valueOf(10.23));
+        products.put("1111111111111", shopProduct1);
+
+        ShopProduct shopProduct2 = new ShopProduct();
+        shopProduct2.setName("Pierniki w czekoladzie mlecznej");
+        shopProduct2.setBrand("Jutrzenka");
+        shopProduct2.setEAN("2222222222222");
+        shopProduct2.setPrice(BigDecimal.valueOf(9.99));
+        products.put("2222222222222", shopProduct2);
+    }
+
     public OperationResult findProductByEAN(String ean) {
         OperationResult operationResult = new OperationResult();
 
-        ShopProduct shopProduct = new ShopProduct();
-        shopProduct.setEAN(ean);
-        shopProduct.setName("Product name");
-        shopProduct.setBrand("Brand");
-        shopProduct.setPrice(BigDecimal.valueOf(4.50));
+        ShopProduct shopProduct = products.get(ean);
 
         //przykład
         operationResult.setResultCode(0);
@@ -34,13 +47,8 @@ public class MockApiClient implements ShopApiClient {
         List<ShopProduct> shopProducts = new ArrayList<ShopProduct>();
 
         Integer i = 1;
-        Random random = new Random();
         for (String productEAN : productsEANs) {
-            ShopProduct shopProduct = new ShopProduct();
-            shopProduct.setEAN(productEAN);
-            shopProduct.setName(String.format("Product%d name", i));
-            shopProduct.setBrand(String.format("Brand%d", i));
-            shopProduct.setPrice(BigDecimal.valueOf(i * 3.14));
+            ShopProduct shopProduct = products.get(productEAN);
 
             shopProducts.add(shopProduct);
 
@@ -84,7 +92,7 @@ public class MockApiClient implements ShopApiClient {
         return operationResult;
     }
 
-    public OperationResult placeOrder() {
+    public OperationResult placeOrder(Set<String> productsEANs) {
         OperationResult operationResult = new OperationResult();
 
         //

@@ -33,5 +33,5 @@ public interface ShopApiClient {
     /**
      *  @return OperationResult
      */
-    public OperationResult placeOrder();
+    public OperationResult placeOrder(Set<String> productsEANs);
 }
